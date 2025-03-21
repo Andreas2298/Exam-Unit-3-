@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 const PLAYER_NAME = "andreasn@uia.no";
 const BASE_URL = "https://alchemy-kd0l.onrender.com";
 
-console.log("starting the UiA Alchehmy Challenge");
+console.log("starting the UiA Alchemy Challenge");
 
 async function startChallenge() {
   try {
@@ -38,3 +38,23 @@ async function startChallenge() {
 }
 
 startChallenge();
+
+async function submitFirstAnswer(answer) {
+  const response = await fetch(`${BASE_URL}/answer1`, {
+    method: "POST",
+
+    headers: {
+      "Content-type": "application/json",
+    },
+
+    body: JSON.stringify({
+      player: PLAYER_NAME,
+      answer: answer,
+    }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+}
+
+submitFirstAnswer("Au Hg Ag Fe Au");
