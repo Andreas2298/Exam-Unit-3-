@@ -67,3 +67,30 @@ async function submitFirstAnswer(answer) {
     );
   }
 }
+
+async function getClue() {
+  try {
+    const response = await fetch(`${BASE_URL}/clue?player=${PLAYER_NAME}`);
+
+    if (!response.ok) {
+      throw new Error(`Error! Status: ${response.status}`);
+    }
+
+    const clueText = await response.text();
+    console.log("Clue for the first challenge");
+    console.log(clueText);
+  } catch (error) {
+    console.error("An error occurred. Please try again:", error.message);
+  }
+}
+
+async function runTheChallenge() {
+  const challengeData = await startChallenge();
+  const answer = "1 2 3 4 5";
+
+  await submitFirstAnswer(answer);
+
+  await getClue();
+}
+
+runTheChallenge();
