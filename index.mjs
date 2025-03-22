@@ -40,21 +40,30 @@ async function startChallenge() {
 startChallenge();
 
 async function submitFirstAnswer(answer) {
-  const response = await fetch(`${BASE_URL}/answer1`, {
-    method: "POST",
+  try {
+    const response = await fetch(`${BASE_URL}/answer`, {
+      method: "POST",
 
-    headers: {
-      "Content-type": "application/json",
-    },
+      headers: {
+        "Content-type": "application/json",
+      },
 
-    body: JSON.stringify({
-      player: PLAYER_NAME,
-      answer: answer,
-    }),
-  });
+      body: JSON.stringify({
+        player: PLAYER_NAME,
+        answer: answer,
+      }),
+    });
 
-  const data = await response.json();
-  console.log(data);
+    if (!response.ok) {
+      throw new Error(`Error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log("This is the response after submitting the answer:");
+    console.log(data);
+  } catch (error) {
+    console.error(
+      "An error occurred while submitted the answer. Try again:",
+      error.message
+    );
+  }
 }
-
-submitFirstAnswer("Au Hg Ag Fe Au");
