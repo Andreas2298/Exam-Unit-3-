@@ -21,7 +21,6 @@ async function startChallenge() {
       const data = await response.json();
       console.log("The first challenge is received");
       console.log(data);
-
       return data;
     } else {
       console.log("The response is not json. Try again");
@@ -36,8 +35,6 @@ async function startChallenge() {
     );
   }
 }
-
-startChallenge();
 
 async function submitFirstAnswer(answer) {
   try {
@@ -60,11 +57,15 @@ async function submitFirstAnswer(answer) {
     const data = await response.json();
     console.log("This is the response after submitting the answer:");
     console.log(data);
+
+    return data;
   } catch (error) {
     console.error(
       "An error occurred while submitted the answer. Try again:",
       error.message
     );
+
+    return null;
   }
 }
 
@@ -86,11 +87,32 @@ async function getClue() {
 
 async function runTheChallenge() {
   const challengeData = await startChallenge();
-  const answer = "1 2 3 4 5";
 
-  await submitFirstAnswer(answer);
+  if (!challengeData || !challengeData.challenge) {
+    console.log("No challenge data received or challenge missing.");
+    return;
+  }
 
-  await getClue();
+  const answer = "GoldQuicksilverSilverIronGold";
+
+  const answerResponse = await submitFirstAnswer(answer);
+
+  if (answerResponse) {
+    console.log(
+      "This is the response from server after the answer has been successfully submitted:"
+    );
+    console.log(answerResponse);
+
+    if (answerResponse.message === "Correct answer!") {
+      console.log(
+        "Answer submitted successfully. Proceeding to get the clue..."
+      );
+      await getClue();
+    } else {
+      console.log("Answer submission failed or was incorrect. Try again.");
+    }
+  } else {
+    console.log("No response was received from the server.");
+  }
 }
-
 runTheChallenge();
